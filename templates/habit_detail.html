@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ habit.name }} - Habit Tracker{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('index') }}" class="back-link">← Back to all habits</a>
+
+<div class="card">
+    <h2>{{ habit.name }}</h2>
+    <div class="detail-stats">
+        <div class="stat-box">
+            <span class="stat-value">{{ current_streak }}</span>
+            <span class="stat-label">Current streak</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-value">{{ longest_streak }}</span>
+            <span class="stat-label">Longest streak</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-value">{{ total_completions }}</span>
+            <span class="stat-label">Total completions</span>
+        </div>
+    </div>
+
+    <h3 class="heatmap-title">Last 90 Days</h3>
+    <div class="heatmap">
+        {% for week in weeks %}
+        <div class="heatmap-week">
+            {% for day in week %}
+                {% if day.is_future %}
+                    <div class="heatmap-day future" title=""></div>
+                {% elif not day.in_range %}
+                    <div class="heatmap-day out-of-range" title=""></div>
+                {% else %}
+                    <div class="heatmap-day {% if day.completed %}completed{% else %}missed{% endif %}"
+                         title="{{ day.date }}{% if day.completed %} - done{% endif %}"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="heatmap-legend">
+        <span class="legend-swatch missed"></span> Missed
+        <span class="legend-swatch completed"></span> Completed
+    </div>
+</div>
+{% endblock %}
