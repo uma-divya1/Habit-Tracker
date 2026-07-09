@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Sign Up - Habit Tracker{% endblock %}
+
+{% block content %}
+<div class="card auth-card">
+    <h2>Create an Account</h2>
+    <form method="post" class="auth-form">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required maxlength="50" autofocus>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required minlength="6">
+        </div>
+        <div class="form-group">
+            <label for="confirm">Confirm Password</label>
+            <input type="password" id="confirm" name="confirm" required minlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary auth-submit">Sign Up</button>
+    </form>
+    <p class="auth-switch">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+</div>
+{% endblock %}

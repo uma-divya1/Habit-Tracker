@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Habit Tracker{% endblock %}
+
+{% block content %}
+<div class="card add-card">
+    <form method="post" action="{{ url_for('add_habit') }}" class="add-form">
+        <input type="text" name="name" placeholder="New habit (e.g. Read 20 minutes)" required maxlength="80">
+        <button type="submit" class="btn btn-primary">Add Habit</button>
+    </form>
+</div>
+
+{% if habits %}
+<div class="habit-list">
+    {% for h in habits %}
+    <div class="habit-card {% if h.done_today %}done{% endif %}">
+        <div class="habit-info">
+            <a href="{{ url_for('habit_detail', habit_id=h.id) }}" class="habit-name">{{ h.name }}</a>
+            <div class="habit-stats">
+                <span class="stat">🔥 {{ h.current_streak }} day streak</span>
+                <span class="stat">🏆 best {{ h.longest_streak }}</span>
+                <span class="stat">✅ {{ h.total_completions }} total</span>
+            </div>
+        </div>
+        <div class="habit-actions">
+            <form method="post" action="{{ url_for('toggle_today', habit_id=h.id) }}">
+                <button type="submit" class="toggle-btn {% if h.done_today %}checked{% endif %}">
+                    {% if h.done_today %}✓ Done today{% else %}Mark done today{% endif %}
+                </button>
+            </form>
+            <form method="post" action="{{ url_for('delete_habit', habit_id=h.id) }}"
+                  onsubmit="return confirm('Delete this habit and all its history?');">
+                <button type="submit" class="delete-btn">Delete</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="empty-state">No habits yet. Add one above to get started.</p>
+{% endif %}
+{% endblock %}
